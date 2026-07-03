@@ -1,0 +1,222 @@
+﻿--- Slide 1 ---
+Software Design and Analysis CS-3004 Lecture#07 Dr. Afia Zafar Assistant Professor Afia.zafar@isb.nu.edu.pk
+
+--- Slide 2 ---
+Agenda I/O programming Streams Byte stream Character stream Data stream 2
+
+--- Slide 3 ---
+Java I/O Java I/O (Input and Output) is used to process the input and produce the output. Java uses the concept of a stream to make I/O operation fast. The  java.io  package contains all the classes required for input and output operations. 3
+
+--- Slide 4 ---
+Stream A stream is a sequence of data. In Java, a stream is composed of bytes. It's called a stream because it is like a stream of water that continues to flow. 4
+
+--- Slide 5 ---
+Streams Streams represents a  Source  (which generates the data in the form of Stream) and a  destination  (which consumes or read data available as Stream). Streams supports a huge range of source and destinations including disk file, arrays, other devices, other programs etc. 5
+
+--- Slide 6 ---
+File Handling File handling is an important part of any application. File Handling implies how to read from and write to file in Java.  Java provides the basic I/O package for reading and writing streams. Java.io  package allows to do all Input and Output tasks in Java. It provides several methods for creating, reading, updating, and deleting files . 6
+
+--- Slide 7 ---
+JavaÆs File Management Java class   java.io.File   defines platform-independent manipulation of file system (Files & directories) by providing whether the file exists is read protected is write protected is, in fact, a directory 7
+
+--- Slide 8 ---
+File Class The  File  class from the  java.io  package, allows us to work with files. To use the  File  class, create an object of the class, and specify the filename or directory name: 8
+
+--- Slide 9 ---
+File Class A File object can refer to either a file or directory File file1 =  new  File( ôdata.txtö ); File file2 =  new  File( ôC:\Javaö ); To obtain the path to the current working directory use  System.getProperty ( ô user.dir ö ); To obtain the file or path separator use System.getProperty  ( ô file.separator ö ); System.getProperty  ( ô path.separator ö ); 9
+
+--- Slide 10 ---
+Useful File Methods 10
+
+--- Slide 11 ---
+Create a File Import the File Class  Import the  IOException  class to handle errors Create Object of a File In  try block , write a code that has to be executed and  catch block  will handle the errors occur in try block. In this case, the most expected error is  IOExpection  and that will be handled by the catch block. 11
+
+--- Slide 12 ---
+Get File Information A path can be  absolute  or  relative . An  absolute path  contains the full path from the root of the file system down to the file or directory it points to. A  relative path  contains the path to the file or directory relative to some other path.  Output 12
+
+--- Slide 13 ---
+Directory Listing Example import java.io.*; public class  DirListing  {   public static void main(String[]  args ) {      File  dir  = new File( System.getProperty (ô user.dir ö ));     if ( dir. isDirectory () )  		{        System.out.println (ôDirectory of ö +  dir );        String[] listing =  dir.list ();       for (int  i =0;  i  <  listing.length ;  i ++) {          System.out.println (ô\tö + listing[ i ]);     }     }   } } 13
+
+--- Slide 14 ---
+Directory Listing, Result > java  DirListing Direcotry  of c:\Java\ 			 DirListing.class 			DirListing.java 			Test 			 TryCatchExample.class 			TryCatchExample.java 			 XslTransformer.class 			XslTransformer.java 14
+
+--- Slide 15 ---
+Input/Output Streams Java IO package provides over 60 input/output classes (streams) Streams are ordered sequence of data that have a source (input), or a destination (output) 15
+
+--- Slide 16 ---
+Streams Java uses the concept of a stream to make I/O operations on a file. These handle data in bytes (8 bits) i.e., the byte stream classes read/write data of 8 bits. Using these you can  store characters, videos, audios, images  etc. These handle data in 16 bit Unicode. Using these you  can read and write text data  only. 16
+
+--- Slide 17 ---
+Basic IO Algorithm Reading open a stream while more information     read information close the stream Writing open a stream while more information     write information close the stream 17
+
+--- Slide 18 ---
+Byte Streams Read and write 8-bit bytes InputStream  and  OutputStream  are abstract super classes Typically used to read and write binary data such as images and sounds  18
+
+--- Slide 19 ---
+Character Streams Read and write 16-bit characters Reader  and  Writer  are the abstract classes Use readers and writers to read and write textual information 19
+
+--- Slide 20 ---
+I/O Super Classes  Reader int  read(); int  read( char   cbuf []); int  read( char   cbuf [],            int  offset,            int  length) Writer int  write( int  c); int  write( char   cbuf []); int  write( char   cbuf [],             int  offset,  		    int  length) InputStream int  read(); int   read(byte  buffer[]); int  read( byte  buffer[],            int  offset,            int  length) OutputStream int  write( byte  b); int  write( byte  buffer[]); int  write( byte  buffer[],             int  offset,             int  length) 20
+
+--- Slide 21 ---
+FileOutputStream  Example 21
+
+--- Slide 22 ---
+FileInputStream Example 22
+
+--- Slide 23 ---
+Character File Streams FileReader FileWriter 23 FileWriter in out FileReader
+
+--- Slide 24 ---
+Write to a file Java  FileWriter  class is used to write data to a file. write()á method to write some text into the file The close() method is used to close the file output stream and releases all system resources associated with this stream. 24
+
+--- Slide 25 ---
+Read a File FileReader  is used for reading streams of characters. 25
+
+--- Slide 26 ---
+Buffer Streams Buffer data while reading or writing, thereby reducing the number of accesses required on the original data source.  More efficient than similar non-buffered streams and are often used with other streams The buffer size may be specified, or default size may be accepted BufferedReader BufferedWriter Character Streams BufferedInputStream BufferedOutputStream Byte Streams 26
+
+--- Slide 27 ---
+Using Buffer Streams import java.io.*;  public class Copy {      public static void main(String[]  args ) throws  IOException  {  		 // opening the streams          FileReader  in = new  FileReader  ( ôinfile.txt" );          BufferedReader   br  = new  BufferedReader (in);          FileWriter  out =  new   FileWriter  ( "outfile.txt" );           BufferedWriter   bw  = new  BufferedWriter (out);                     // processing the streams         String  aLine  = null;          while (( aLine  =  br.readLine () ) != null) {              bw.write ( aLine , 0,  aLine.length ());          } 		 // closing the streams          in.close ();   out.close ();      }  }  27
+
+--- Slide 28 ---
+Database Connectivity
+
+--- Slide 29 ---
+Java Database Connectivity JDBC stands for  J ava  D ata b ase  C onnectivity. JDBC is a Java API to connect and execute the query with the database. The JDBC API defines interfaces and classes for writing databases applications in Java by making database connection. 29
+
+--- Slide 30 ---
+Database Database is a set of files containing application data. This data needs to be inserted, deleted, updated, extracted for any valid reason. You can write programs to perform all such actions You can use readymade database management software like Oracle and MySQL. A Database Management Software or DBMS is used for storing, manipulating, and managing data in a database environment. Users can construct their own databases using a DBMS to satisfy their business requirements. 30
+
+--- Slide 31 ---
+Overview 31
+
+--- Slide 32 ---
+JDBC Architecture 32
+
+--- Slide 33 ---
+Why Should We Use JDBC Before JDBC, ODBC API was the database API to connect and execute the query with the database. But, ODBC API uses ODBC driver which is written in C language (i.e. platform dependent and unsecured). That is why Java has defined its own API (JDBC API) that uses JDBC drivers (written in Java language). We can use JDBC API to handle database using Java program and can perform the following activities: Connect to the database Execute queries and update statements to the database Retrieve the result received from the database. 33
+
+--- Slide 34 ---
+JDBC Driver types Type 1.   The JDBC-ODBC bridge driver uses ODBC driver to connect to the database. The JDBC-ODBC bridge driver converts JDBC method calls into the ODBC function calls. This is now discouraged because of thin driver  (Old method, slow and now discouraged.) Type 2.  The Native API driver uses the client-side libraries of the database. The driver converts JDBC method calls into native calls of the database API.  It is not written entirely in java. Type 3.  The Network Protocol driver uses middleware (application server) that converts JDBC calls directly or indirectly into the vendor-specific database protocol . It is fully written in java. Type 4.  Like type 3 but pure Java implementation, and therefore  platform independent  fastest and most used. 34
+
+--- Slide 35 ---
+JDBC Drivers JDBC consists of two parts:   JDBC API, a purely Java-based API  JDBC Driver Manager, which  communicates with vendor-specific drivers that  perform the real communication with the database.  35
+
+--- Slide 36 ---
+36 Basic steps to use a database in Java Establish a  connection Create JDBC  Statements Execute  SQL  Statements GET  ResultSet   Close  connections
+
+--- Slide 37 ---
+37 Handing SQL Exception Setting DB Credentials CRUD Query Load driver Establish Connection Execute queries with the database
+
+--- Slide 38 ---
+38 import  java.sql.Connection ; import  java.sql.DriverManager ; import  java.sql.SQLException ; import  java.sql.Statement ; public class JDBCType4Demo {     public static void main(String[]  args ) {          // Oracle Type 4 Driver class         String  driverClassName  = " oracle.jdbc.driver.OracleDriver ";          // JDBC URL for Oracle XE         String  url  = " jdbc:oracle:thin :@localhost:1521:XE"; // 1521 is default port         String username = " scott ";         String password = "tiger";         String query = "INSERT INTO students VALUES (109, ' bhatt ')";         Connection con = null;         Statement  st  = null;         
+
+--- Slide 39 ---
+39 try { // Load Oracle JDBC driver Class.forName ( driverClassName ); // Get connection directly to Oracle DB con =  DriverManager.getConnection ( url , username, password); // Create a statement st  =  con.createStatement (); // Execute query int count =  st.executeUpdate (query); System.out.println ("Number of rows affected by this query= " + count); } catch ( ClassNotFoundException  e) { System.out.println ("Oracle JDBC Driver not found: " +  e.getMessage ()); } catch ( SQLException  e) { System.out.println ("Database error: " +  e.getMessage ()); } finally { try { if ( st  != null)  st.close (); if (con != null)  con.close (); } catch ( SQLException  e) { System.out.println ("Error closing resources: " +  e.getMessage ()); }         
+
+--- Slide 40 ---
+JDBC imports 40 Connection  represents the connection to the database. DriverManager  obtains the connection to the database.  SQLException  handles SQL errors between the Java application and the database. ResultSet  and  Statement  model the data result sets and SQL statements.
+
+--- Slide 41 ---
+DriverManager  class The  DriverManager  class acts as an interface between user and drivers. It keeps track of the drivers that are available and handles establishing a connection between a database and the appropriate driver.  The  DriverManager  class maintains a list of Driver classes that have registered themselves by calling the method  DriverManager.registerDriver (). 41
+
+--- Slide 42 ---
+Connection interface Connectionáinterfaceáresides in á java.sql á packageáand it represents a session with a specific database you are connecting to.  42
+
+--- Slide 43 ---
+Statement interface The Statement interface  provides methods to   execute queries  with the database.  The important methods of Statement interface are as follows: public  ResultSet   executeQuery (String  sql ):  is used to execute SELECT query. It returns the object of  ResultSet . public int  executeUpdate (String  sql ):  is used to execute specified query, it may be create, drop, insert, update, delete etc. public  boolean  execute(String  sql ):  is used to execute queries that may return multiple results. public int[]  executeBatch ():  is used to execute batch of commands. 43
+
+--- Slide 44 ---
+ResultSet  interface The object of  ResultSet  maintains a cursor pointing to a row of a table. Initially, cursor points to before the first row. 44
+
+--- Slide 45 ---
+PreparedStatement  interface The  PreparedStatement  interface is a  subinterface  of Statement. It is used to execute parameterized query. 45
+
+--- Slide 46 ---
+Oracle Java Connectivity Demo
+
+--- Slide 47 ---
+Requirements Eclipse JDK Oracle Setup  Oracle JDBC Driver  47
+
+--- Slide 48 ---
+Install Oracle Install   https://www.oracle.com/database/technologies/xe-downloads.html 48
+
+--- Slide 49 ---
+Prerequisites Oracle JDBC Driver https://www.oracle.com/database/technologies/appdev/jdbc-downloads.html 49
+
+--- Slide 50 ---
+Important to remember password 50
+
+--- Slide 51 ---
+Connect  to database Open SQL Plus connect sys/ [ password set during oracle installation ] @localhost:1521/XE as  sysdba ; 51
+
+--- Slide 52 ---
+Open Eclipse-> open perspective -> Database Development -> New Connection Profile -> Oracle -> New Driver Definition -> Oracle Thin Driver -> Jar List -> provide OJDBC.jar  52
+
+--- Slide 53 ---
+Connecting to the database The driver class for the oracle database isá oracle.jdbc.driver.OracleDriver . where  jdbc  is the API,  oracle  is the database,  thin  is the driver,  IP address ,  1521  is the port number and  XE  is the Oracle service name. The default username for the oracle database isá system . password  given by the user at the time of installing the oracle database. 53
+
+--- Slide 54 ---
+CRUD Operations
+
+--- Slide 55 ---
+Retrieve Data from Database 55
+
+--- Slide 56 ---
+INSERT Statement 56
+
+--- Slide 57 ---
+UPDATE Statement 57
+
+--- Slide 58 ---
+DELETE Statement 58
+
+--- Slide 59 ---
+MySQL Database Connect to MySQL database in Eclipse IDE using Database Development perspective: Download MySQL   https://dev.mysql.com/downloads/installer/ Download MySQL JDBC driver  https://dev.mysql.com/downloads/connector/j/ Create Database and Table in MySQL Execute SQL Statements 59
+
+--- Slide 60 ---
+MySQL Command Line Activities 60
+
+--- Slide 61 ---
+Database Development perspective in Eclipse 61
+
+--- Slide 62 ---
+Connect Java Application with  mysql  database 62
+
+--- Slide 63 ---
+NoSql  Database with Java Eclipse MongoDB with Java connection Download MongoDB Server on your machine  Do wnload the Use the Java Driver for synchronous Java applications. Add the JDBC Driver JAR files in Eclipse for establishing the MongoDB JDBC connect Follow the step by step  link  for more details. 63
+
+--- Slide 64 ---
+Design for Change Identify the functionality that may change (frequently?) Take special consideration in implementing such functionality in classes, so that the changing functionality will have minimized impact on the other parts Use the principles of Polymorphism to provide a  stable interface  of the potentially varying functionality.
+
+--- Slide 65 ---
+D e sign for Change û Write to Interfaces The client classes are to be written in a way that they talk to the stable interface Example û Handling Persistence Probability of change?
+
+--- Slide 66 ---
+Example û Handling Persistence Student save() Option 1 Write SQL Queries here Problem?
+
+--- Slide 67 ---
+Example û Handling Persistence Student save() Option 2 Write SQL Queries here B e nefits over Option 1 Problem? DBHandler saveStudent(this)
+
+--- Slide 68 ---
+Example û Write to Interfaces Student save() PersistenceHandler saveStudent(this) Student PersistenceHandler OracleDBHandler SQL Persistence Option 3 Write to interfaces B e nefits over other options P r oblem? When to initialize and how?
+
+--- Slide 69 ---
+Implementation //Student Class Student{  	 PersitenceHandler   persHandler ;                 void save(){    	 persHandler.saveStudent (this);                   }        void  setPersitenceHandler  ( PersitenceHandler   ph )                 { 		   this.persHandler = ph ;                 }
+
+--- Slide 70 ---
+//  PersistenceHandler Class  PersistenceHandler { 	abstract void  saveStudent (Student s); } Implementation
+
+--- Slide 71 ---
+class  OracleDBHandler  extends  PersistenceHandler { 	  void  saveStudent (Student s){ //connection //insert query formulation //execute query } } Implementation
+
+--- Slide 72 ---
+class  SQLHandler  extends  PersistenceHandler { 	  void  saveStudent (Student s){ //connection //insert query formulation //execute query } } Implementation
+
+--- Slide 73 ---
+Main Void main() { PersitenceHandler  handler= new  OracleHandler (); University  uni = new University(); Uni.  setPersitenceHandler (handler); } Implementation
+
+--- Slide 74 ---
+Task 02 Add database in to your Account management system There should be a menu where you ask user where he wants to store his data. Following are the options File Oracle MySQL 74
+

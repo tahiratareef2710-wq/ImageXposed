@@ -1,0 +1,624 @@
+Deliverable 5 - SDA 
+ 
+Hassan Amir i240556 
+M. Ahmad Abbas i243058 
+Tahira Tareef i240721 
+
+User
+name : String
+email : String
+password : String
+createdAt : Date
+Scan
+scanId : String
+date : Date
+verdict : String
+confidenceScore : Float
+Image
+fileName : String
+fileFormat : String
+fileSize : Long
+uploadDate : Date
+Report
+reportId : String
+generatedDate : Date
+exportFormat : String
+Feedback
+userEmail : String
+rating : Int
+comment : String
+submittedDate : Date
+conducts
+1
+*
+examines
+1
+1
+generates
+1
+0..1
+receives
+1
+0..1
+ImageXposed — Domain Model
+submits
+1
+*
+
+Login
+Manage User Profile
+Upload Image 
+Save Scan Record
+Generate Forensic Report
+Export Forensic Report
+Actor
+User
+ImageXposed Desktop Application
+Analyze Image Authenticity
+Validate File
+<<include>>
+Manage Scan History
+M. AHMAD ABBAS I243058
+HASSAN AMIR I240556
+TAHIRA TAREEF I240721
+<<actor>>
+File
+System
+<<actor>>
+Database
+System
+View Image
+Register User
+User Feedback
+
+Login
+:LoginView
+:ImageXposed
+Desktop Application
+u:User
+:DatabaseHandler
+:DisplayService
+1: launchApplication()
+2: lookupUser(username)
+3: userRecord
+4: submitCredentials(username, password)
+5: validateCredentials(userRecord, password)
+6: accessGranted
+7: displayDashboard()
+
+Register User
+:RegisterController
+newUser:User
+:DatabaseHandler
+:DisplayService
+1: selectRegisterOption()
+2: displayRegistrationForm()
+3: submitRegistration(username, email, password)
+4: checkUniqueness(username, email)
+5: uniquenessResult
+6: create(username, email, passwordHash)
+7: validateFormData(username, email, password)
+8: confirmAccountCreated()
+9: displayDashboard()
+:RegistrationView
+
+Manage User Profile
+:ProfileView
+:ManageProfile
+Controller
+u:User
+:DatabaseHandler
+:DisplayService
+1: selectProfile()
+2: retrieveProfileData(userId)
+3: profileData
+4: displayCurrentProfile(profileData)
+5: submitProfileChanges(updatedFields)
+6: validateChanges(updatedFields)
+7: saveUpdatedProfile(userId, updatedFields)
+8: persist(userId, updatedFields)
+9: confirmSaved
+10: confirmSaved
+11: displayProfileUpdated()
+
+Upload Image
+:UploadImage
+Controller
+:UploadView
+img:Image
+:DatabaseHandler
+:DisplayService
+1: selectUpload()
+2: openFileExplorer()
+3: selectImageFile
+(filePath)
+4: create
+(imageId, fileName, 
+fileFormat, fileSize)
+5: validateFileFormat
+(filePath)
+6: validateFileSize
+(filePath)
+7: assignTrackingID
+(filePath)
+8: recordImageEntry
+(imageId, metadata)
+9: confirmCreated(imageId)
+10: confirmCreated(imageId)
+11:
+displayUploadSuccess(imageId)
+
+View Image
+:ImageView
+:ViewImageController
+img:Image
+s:Scan
+:DatabaseHandler
+1: selectImageToView(imageID)
+2: processImageForDisplay(imageID)
+3: scaleImage()
+4: imageData
+5: logViewEvent(imageID)
+6: persist(scanId, viewEvent)
+7: confirmSaved
+8: eventLogged
+9: imagePreview(imageData)
+
+Validate File
+:ValidateView
+:ValidateFileController
+img:Image
+s:Scan
+:DatabaseHandler
+1: initiateValidation(imageID)
+2: scanForCorruption(imageID)
+3: corruptionResult
+4: checkFormat(imageID)
+5: formatResult
+6: checkSizeDimensions(imageID)
+7: sizeResult
+8: recordValidationResult(imageID, result)
+9: persist(scanId, validationResult)
+10: confirmSaved
+11: validationSaved
+12: validationSuccessful()
+
+Analyze Image Authenticity
+:AnalyzeImageView
+:AnalyzeImageController
+img:Image
+s:Scan
+:DatabaseHandler
+1: analyzeImage(imageId)
+2: extractMetadata()
+3: metadata
+4: generateMD5Hash()
+5: md5Hash
+6: generateSHA256Hash()
+7: sha256Hash
+8: performELA()
+9: elaImage
+10: saveAnalysisResults(imageId, resultsData)
+11: persist(scanData)
+12: confirmSaved
+13: confirmSaved
+14: displayAnalysisResults(metadata, hashes, elaImage)
+:DatabaseHandler
+
+Save Scan Record
+:ScanRecordView
+:SaveScanController
+s:Scan
+:DatabaseHandler
+1: saveScan()
+2: saveScanRecord(scanId, userId, scanData)
+3: packageScanData()
+4: generateScanId()
+5: stampTimestamp()
+6: persist(scanRecord)
+7: confirmSaved
+8: recordId
+9: displaySuccess(recordId)
+:DisplayService
+
+Analyze Image Authenticity
+:AnalysisView
+:AnalyzeImageController
+:Image
+:Scan
+:DatabaseHandler
+1: analyzeImage(imageId)
+2: extractMetadata()
+3: metadata
+4: generateMD5Hash()
+5: md5Hash
+6: generateSHA256Hash()
+7: sha256Hash
+8: performELA()
+9: elaImage
+10: saveAnalysisResults(imageId, resultsData)
+11: persist(scanData)
+12: confirmSaved
+13: confirmSaved
+14: displayAnalysisResults(metadata, hashes, elaImage)
+:DisplayService
+
+Generate Forensic Report
+:ReportGenerationView
+:GenerateReportController
+:Scan
+:Report
+:DatabaseHandler
+1: generateReport(scanId)
+2: fetchAnalysisResults(scanId)
+3: loadScanData(scanId)
+4: scanData
+5: analysisResults
+6: compileReport(scanData)
+7: applyLayout()
+8: reportData
+9: displayReportPreview(reportData)
+:DisplayService
+
+Export Forensic Report
+:ExportView
+:ExportReportController
+:Report
+:DatabaseHandler
+1: exportReport(reportId)
+2: promptExportDestination
+3: provideExportPath(filePath, format)
+4: convertToFormat(format)
+5: exportToFile(filePath)
+6: filePath
+7: saveExportRecord(reportId, filePath)
+8: confirmSaved
+9: displayExportSuccess(filePath)
+:DisplayService
+
+User Feedback
+:FeedbackView
+:FeedbackController
+:Feedback
+:DatabaseHandler
+1: openFeedbackForm()
+2: feedbackForm
+3: submitFeedback(category, subject, description)
+4: createFeedback(userId, category, subject, description)
+5: validate()
+6: saveFeedback(feedbackData)
+7: confirmSaved
+8: feedbackSaved
+9: displayThankYou()
+:DisplayService
+
+IRepository
++ save(entity : B aseE ntity) : void
++findById(id : String) : BaseEntity
++ delete(id : String) : void
++findAll() : List<BaseEntity>
+B aseV iew
+# title : S trin g
+#isV isible : B oolean
++ render() : void
++ handleInput() : void
++show () : void
++ hide() : void
+BaseController
+#dbH andler : D atabaseH andler
+#displayService : D isplayService
++ handleR equest() : void
++ validate() : Boolean
++getD bH andler() : D atabaseH andler
+B aseE ntity
+# id  : S trin g
+# created A t : D ate
+# u p d ated A t : D ate
++ validate() : Boolean
++toM ap() : M ap
++ getId() : S tring
+B aseService
+#isInitialised : B oolean
++initialise() : void
++ execute() : void
++ shutdow n() : void
+«V iew »
+LoginView
+-usernam e : S tring
+-passw ord : String
++ render() : void
++ handleInput() : void
++launchA pplication() : void
++subm itC redentials() : void
+«V iew »
+R egistrationV iew
+-usernam e : S tring
+-em ail : String
+-passw ord : String
++ render() : void
++ handleInput() : void
++selectR egisterO ption() : void
++subm itR egistration() : void
+«V iew »
+ProfileView
+-updatedFields : M ap
++ render() : void
++ handleInput() : void
++selectProfile() : void
++subm itProfileC hanges() : void
+«V iew »
+UploadView
+-filePath : String
++ render() : void
++ handleInput() : void
++openFileExplorer() : void
++selectIm ageFile() : void
+«V iew »
+Im ageV iew
+-im ageID  : String
++ render() : void
++ handleInput() : void
++selectIm ageToV iew () : void
++im agePreview () : void
+«V iew »
+FileValidationView
+-im ageID  : String
++ render() : void
++ handleInput() : void
++initiateV alidation() : void
++validationSuccessful() : void
+«V iew »
+AnalysisView
+-im ageId : String
++ render() : void
++ handleInput() : void
++ analyzeIm age() : void
++displayA nalysisR esults() : void
+«V iew »
+ScanRecordV iew
+-scanId : String
++ render() : void
++ handleInput() : void
++ saveS can() : void
++displaySuccess() : void
+«V iew »
+ScanHistoryView
+-userId : String
++ render() : void
++ handleInput() : void
++view H istory() : void
++displayScanList() : void
+«V iew »
+R eportG enerationV iew
+-scanId : String
++ render() : void
++ handleInput() : void
++ generateR eport() : void
++displayR eportPreview () : void
+«V iew »
+ExportView
+-reportId : String
+-exportForm at : String
++ render() : void
++ handleInput() : void
++exportR eport() : void
++provideE xportPath() : void
+«V iew »
+FeedbackV iew
+-category : S tring
+-subject : String
++ render() : void
++ handleInput() : void
++openFeedbackForm () : void
++ subm itFeedback() : void
+«Controller»
+LoginController
++ handleR equest() : void
++ validate() : B oolean
++lookupU ser(usernam e : String) : U ser
++subm itC redentials(u : String, p : String) : void
+«Controller»
+R egistrationC ontroller
++ handleR equest() : void
++ validate() : B oolean
++checkU niqueness(u : String, e : String) : B oolean
++subm itR egistration() : void
+«Controller»
+M anageProfileController
++ handleR equest() : void
++ validate() : B oolean
++retrieveProfileD ata(userId : String) : U ser
++saveU pdatedProfile(userId : String) : void
+«Controller»
+U ploadIm ageController
++ handleR equest() : void
++ validate() : B oolean
++recordIm ageEntry(id : String, m eta : M ap) : void
++displayU ploadSuccess() : void
+«Controller»
+ViewIm ageController
++ handleR equest() : void
++ validate() : B oolean
++processIm ageForD isplay(id : String) : void
++logV iew Event(id : String) : void
+«Controller»
+ValidateFileController
++ handleR equest() : void
++ validate() : B oolean
++initiateV alidation(id : String) : void
++recordV alidationR esult(id : String) : void
+«Controller»
+A nalyzeIm ageController
++ handleR equest() : void
++ validate() : B oolean
++analyzeIm age(id : String) : void
++saveA nalysisR esults(id : String) : void
+«Controller»
+SaveScanC ontroller
++ handleR equest() : void
++ validate() : B oolean
++saveScanR ecord(id : String, data : M ap) : void
++displaySuccess(recordId : String) : void
+«Controller»
+G enerateR eportC ontroller
++ handleR equest() : void
++ validate() : B oolean
++ generateR eport(scanId : String) : void
++fetchA nalysisR esults(scanId : String) : M ap
+«Controller»
+ExportReportController
++ handleR equest() : void
++ validate() : B oolean
++exportR eport(reportId : String) : void
++convertToForm at(form at : String) : File
+«Controller»
+FeedbackC ontroller
++ handleR equest() : void
++ validate() : B oolean
++subm itFeedback(cat : String, sub : String) : void
++ saveF eedback() : void
+«Controller»
+M anageScanH istoryController
++ handleR equest() : void
++ validate() : B oolean
++loadScanH istory(userId : String) : L ist<Scan>
++deleteScanR ecord(scanId : String) : void
+«E ntity»
+U ser
+-usernam e : S tring
+-em ail : String
+-passw ordH ash : String
+-profilePicture : String
++ validate() : B oolean
++validateC redentials(p : String) : B oolean
++validateForm D ata(u : String, e : String) : B oolean
+«E ntity»
+Im ag e
+-fileN am e : String
+-fileForm at : String
+-fileSize : Long
+-filePath : String
+-trackingId : String
++ validate() : B oolean
++validateFileForm at() : B oolean
++assignTrackingID () : String
++generateM D 5H ash() : String
++perform ELA () : Im ageD ata
+«E ntity»
+S c a n
+-userId : String
+-im ageId : String
+-scanD ata : M ap
+-tim estam p : D ate
+-validationR esult : String
++ validate() : B oolean
++ packageS canD ata() : M ap
++ generateS canId() : S tring
++ stam pT im estam p() : D ate
+«E ntity»
+R eport
+-scanId : String
+-reportD ata : M ap
+-exportForm at : String
+-generatedA t : D ate
++ validate() : B oolean
++com pileR eport(data : M ap) : M ap
++convertToForm at(fm t : String) : File
++exportToFile(path : String) : void
+«E ntity»
+F eedback
+-userId : String
+-category : S tring
+-subject : String
+-subm ittedA t : D ate
++ validate() : B oolean
++createFeedback(userId : String, cat : String) : void
+« S ervice»
+D atabaseH andler
+-connection : D B C onnection
++initialise() : void
++ execute() : void
++lookupU ser(usernam e : String) : U ser
++checkU niqueness(u : String, e : String) : B oolean
++recordIm ageEntry(id : String, m eta : M ap) : void
++ persist(data : M ap) : void
++fetchA nalysisR esults(scanId : String) : M ap
++ saveFeedback(data : M ap) : void
+« S ervice»
+D isplayService
+-currentV iew  : String
++initialise() : void
++ execute() : void
++displayD ashboard() : void
++displayC urrentProfile(data : M ap) : void
++displayU ploadSuccess(id : String) : void
++displayR eportPreview (data : M ap) : void
+« S ervice»
+N otificationService
+-notificationQ ueue : List
++initialise() : void
++ execute() : void
++notifyU ploadSuccess(id : String) : void
++notifyV alidationR esult(result : String) : void
++notifyExportC om plete(path : String) : void
+ow ns
+1
+0 ..*
+p ro d u ces
+1
+1 ..*
+g e n e ra te s
+1
+0 ..1
+su b m its
+1
+0 ..*
+m a n a g e s
+1
+0 ..*
+m a n a g e s
+1
+0 ..*
+m a n a g e s
+1
+0 ..*
+m a n a g e s
+1
+0 ..*
+m a n a g e s
+1
+0 ..*
+« u se s»
+« u se s»
+« u se s»
+« u se s»
+« u se s»
+« u se s»
+« u se s»
+« u se s»
+« u se s»
+« u se s»
+« u se s»
+« u se s»
+« u se s»
+« u se s»
+« u se s»
+« u se s»
+« u se s»
+« u se s»
+« u se s»
+« u se s»
+« u se s»
+« u se s»
+« u se s»
+« u se s»
+« u se s»
+« u se s»
+« u se s»
+« u se s»
+« u se s»
+« u se s»
+« u se s»
+« u se s»
+« u se s»
+« u se s»
